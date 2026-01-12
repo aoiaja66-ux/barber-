@@ -1,187 +1,288 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Выбор услуг - Tulanov Barber</title>
+    <title>Tulanov Barber Booking</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --tg-theme-bg-color: #ffffff;
-            --tg-theme-text-color: #000000;
-            --tg-theme-button-color: #2481cc;
-            --tg-theme-button-text-color: #ffffff;
-            --tg-theme-hint-color: #999999;
+            --gold: #D4AF37;
+            --black: #121212;
+            --dark-grey: #1E1E1E;
+            --text-white: #FFFFFF;
+            --tg-theme-button-color: #D4AF37;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #f0f0f0);
-            color: var(--tg-theme-text-color, #222);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--black);
+            color: var(--text-white);
             margin: 0;
             padding: 0;
-            user-select: none;
+            padding-bottom: 80px;
         }
 
         .header {
-            padding: 20px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+            padding: 30px 20px;
             text-align: center;
-            background: #1a1a1a;
-            color: white;
+            border-bottom: 2px solid var(--gold);
         }
 
-        .tabs {
-            display: flex;
-            overflow-x: auto;
-            background: #fff;
-            border-bottom: 1px solid #ddd;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+        .header h1 {
+            color: var(--gold);
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .tab {
-            padding: 15px 20px;
-            white-space: nowrap;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            color: var(--tg-theme-hint-color, #666);
-        }
-
-        .tab.active {
-            color: var(--tg-theme-button-color, #2481cc);
-            border-bottom: 2px solid var(--tg-theme-button-color, #2481cc);
+        .section-title {
+            padding: 20px 15px 10px;
+            color: var(--gold);
+            font-size: 18px;
+            text-transform: uppercase;
             font-weight: bold;
         }
 
-        .service-list {
-            padding: 10px;
+        .masters-container {
+            display: flex;
+            padding: 0 15px;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
         }
 
-        .category-section {
-            display: none;
+        .master-card {
+            min-width: 140px;
+            background: var(--dark-grey);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: 0.3s;
         }
 
-        .category-section.active {
-            display: block;
+        .master-card.selected {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
         }
+
+        .master-photo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #333;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            border: 2px solid var(--gold);
+        }
+
+        .master-name { font-weight: bold; margin-bottom: 5px; }
+        .master-rank { font-size: 12px; color: var(--gold); }
 
         .service-item {
-            background: #fff;
-            margin-bottom: 10px;
+            background: var(--dark-grey);
+            margin: 0 15px 10px;
             padding: 15px;
             border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--gold);
         }
 
-        .service-info h3 {
-            margin: 0 0 5px 0;
-            font-size: 16px;
-        }
+        .service-info h3 { margin: 0; font-size: 16px; }
+        .service-info p { margin: 5px 0 0; color: var(--gold); font-weight: bold; }
 
-        .service-info p {
-            margin: 0;
-            font-size: 14px;
-            color: var(--tg-theme-hint-color, #888);
-        }
-
-        .book-btn {
-            background: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
+        .select-btn {
+            background: var(--gold);
+            color: var(--black);
             border: none;
-            padding: 10px 15px;
+            padding: 8px 15px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
         }
 
-        .book-btn:active {
-            opacity: 0.8;
+        .select-btn.selected {
+            background: #fff;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 0 15px;
+        }
+
+        .time-slot {
+            background: var(--dark-grey);
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .time-slot.selected {
+            background: var(--gold);
+            color: var(--black);
+            font-weight: bold;
+        }
+
+        .time-slot.taken {
+            opacity: 0.3;
+            text-decoration: line-through;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: var(--black);
+            border-top: 1px solid #333;
+        }
+
+        .main-btn {
+            width: 100%;
+            background: var(--gold);
+            color: var(--black);
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h2>Выберите услугу</h2>
+        <h1>Tulanov Barber</h1>
     </div>
 
-    <div class="tabs" id="tabs">
-        <div class="tab active" onclick="showCategory('haircuts')">Стрижки</div>
-        <div class="tab" onclick="showCategory('beard')">Борода</div>
-        <div class="tab" onclick="showCategory('complex')">Комплексы</div>
+    <div class="section-title">Tanlang: Master</div>
+    <div class="masters-container">
+        <div class="master-card" onclick="selectMaster(this, 'Ali', 'Top Barbor')">
+            <div class="master-photo">👨🏻‍💼</div>
+            <div class="master-name">Ali</div>
+            <div class="master-rank">Top Barber</div>
+        </div>
+        <div class="master-card" onclick="selectMaster(this, 'Usmon', 'Soqol ustasi')">
+            <div class="master-photo">🧔🏻</div>
+            <div class="master-name">Usmon</div>
+            <div class="master-rank">Soqol ustasi</div>
+        </div>
     </div>
 
-    <div class="service-list">
-        <div id="haircuts" class="category-section active">
-            <div class="service-item">
-                <div class="service-info">
-                    <h3>Мужская стрижка</h3>
-                    <p>1000 ₽</p>
-                </div>
-                <button class="book-btn" onclick="selectService('Мужская стрижка', 1000)">Выбрать</button>
-            </div>
-            <div class="service-item">
-                <div class="service-info">
-                    <h3>Стрижка машинкой</h3>
-                    <p>600 ₽</p>
-                </div>
-                <button class="book-btn" onclick="selectService('Стрижка машинкой', 600)">Выбрать</button>
-            </div>
+    <div class="section-title">Xizmatlar</div>
+    <div id="services">
+        <div class="service-item">
+            <div class="service-info"><h3>Sarchiroyli soch turmagi</h3><p>80.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Sarchiroyli soch turmagi', 80000)">+</button>
         </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Bolalar (10 yoshgacha)</h3><p>60.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Bolalar (10 yoshgacha)', 60000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Soch + Soqol</h3><p>150.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Soch + Soqol', 150000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Kamuflaj</h3><p>50.000 - 80.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Kamuflaj', 50000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Soqol modelingi</h3><p>50.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Soqol modelingi', 50000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Okantovka</h3><p>30.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Okantovka', 30000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Bosh yuvish</h3><p>25.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Bosh yuvish', 25000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Yuz tozalash</h3><p>60.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Yuz tozalash', 60000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Qora maska</h3><p>50.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Qora maska', 50000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Vosk (1 zona)</h3><p>15.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Vosk', 15000)">+</button>
+        </div>
+        <div class="service-item">
+            <div class="service-info"><h3>Mashinkada olish</h3><p>40.000 so'm</p></div>
+            <button class="select-btn" onclick="selectService(this, 'Mashinkada olish', 40000)">+</button>
+        </div>
+    </div>
 
-        <div id="beard" class="category-section">
-            <div class="service-item">
-                <div class="service-info">
-                    <h3>Оформление бороды</h3>
-                    <p>800 ₽</p>
-                </div>
-                <button class="book-btn" onclick="selectService('Оформление бороды', 800)">Выбрать</button>
-            </div>
-            <div class="service-item">
-                <div class="service-info">
-                    <h3>Бритье опасной бритвой</h3>
-                    <p>900 ₽</p>
-                </div>
-                <button class="book-btn" onclick="selectService('Бритье опасной бритвой', 900)">Выбрать</button>
-            </div>
-        </div>
+    <div class="section-title">Vaqtni tanlang</div>
+    <div class="time-grid">
+        <div class="time-slot" onclick="selectTime(this, '09:00')">09:00</div>
+        <div class="time-slot" onclick="selectTime(this, '10:30')">10:30</div>
+        <div class="time-slot taken">12:00</div>
+        <div class="time-slot" onclick="selectTime(this, '13:30')">13:30</div>
+        <div class="time-slot" onclick="selectTime(this, '15:00')">15:00</div>
+        <div class="time-slot" onclick="selectTime(this, '16:30')">16:30</div>
+        <div class="time-slot" onclick="selectTime(this, '18:00')">18:00</div>
+        <div class="time-slot" onclick="selectTime(this, '19:30')">19:30</div>
+    </div>
 
-        <div id="complex" class="category-section">
-            <div class="service-item">
-                <div class="service-info">
-                    <h3>Стрижка + Борода</h3>
-                    <p>1600 ₽</p>
-                </div>
-                <button class="book-btn" onclick="selectService('Стрижка + Борода', 1600)">Выбрать</button>
-            </div>
-        </div>
+    <div class="footer">
+        <button class="main-btn" onclick="confirmBooking()">Zapis qilish</button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
+        tg.MainButton.hide();
 
-        function showCategory(categoryId) {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
+        let selection = {
+            master: null,
+            service: null,
+            price: null,
+            time: null
+        };
 
-            document.querySelectorAll('.category-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(categoryId).classList.add('active');
+        function selectMaster(el, name, rank) {
+            document.querySelectorAll('.master-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selection.master = name;
         }
 
-        function selectService(name, price) {
-            const data = {
-                service: name,
-                price: price
-            };
-            tg.sendData(JSON.stringify(data));
+        function selectService(el, name, price) {
+            document.querySelectorAll('.select-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            selection.service = name;
+            selection.price = price;
+        }
+
+        function selectTime(el, time) {
+            if(el.classList.contains('taken')) return;
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            el.classList.add('selected');
+            selection.time = time;
+        }
+
+        function confirmBooking() {
+            if(!selection.master || !selection.service || !selection.time) {
+                alert('Iltimos, hamma narsani tanlang!');
+                return;
+            }
+            tg.sendData(JSON.stringify(selection));
             tg.close();
         }
     </script>
