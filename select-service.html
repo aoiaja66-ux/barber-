@@ -174,17 +174,12 @@
         <h1 id="title">Tulanov Barber</h1>
     </div>
 
-    <div class="section-title" id="choose-master">Choose Master</div>
+    <div class="section-title" id="choose-master">Master</div>
     <div class="masters-container">
-        <div class="master-card" onclick="selectMaster(this, 'Ali', 'Top Barber')">
+        <div class="master-card selected" onclick="selectMaster(this, 'Abdulboriy Tulanov', 'Top Barber')">
             <div class="master-photo">👨🏻‍💼</div>
-            <div class="master-name">Ali</div>
-            <div class="master-rank" id="ali-rank">Top Barber</div>
-        </div>
-        <div class="master-card" onclick="selectMaster(this, 'Usmon', 'Beard Specialist')">
-            <div class="master-photo">🧔🏻</div>
-            <div class="master-name">Usmon</div>
-            <div class="master-rank" id="usmon-rank">Beard Specialist</div>
+            <div class="master-name">Abdulboriy Tulanov</div>
+            <div class="master-rank" id="master-rank">Top Barber</div>
         </div>
     </div>
 
@@ -203,17 +198,16 @@
         tg.expand();
 
         let currentLang = 'en';
-        let selection = { master: null, service: null, price: null, time: null, lang: 'en' };
+        let selection = { master: 'Abdulboriy Tulanov', service: null, price: null, time: null, lang: 'en' };
 
         const translations = {
             en: {
-                chooseMaster: "Choose Master",
+                chooseMaster: "Master",
                 services: "Services",
                 selectTime: "Select Time",
                 book: "Book Appointment",
-                aliRank: "Top Barber",
-                usmonRank: "Beard Specialist",
-                alert: "Please select all options!",
+                masterRank: "Top Barber",
+                alert: "Please select service and time!",
                 items: [
                     { name: "Premium Haircut", price: 80000 },
                     { name: "Kids (under 10)", price: 60000 },
@@ -229,13 +223,12 @@
                 ]
             },
             ru: {
-                chooseMaster: "Выберите мастера",
+                chooseMaster: "Мастер",
                 services: "Услуги",
                 selectTime: "Выберите время",
                 book: "Записаться",
-                aliRank: "Топ Барбер",
-                usmonRank: "Мастер по бороде",
-                alert: "Пожалуйста, выберите все параметры!",
+                masterRank: "Топ Барбер",
+                alert: "Пожалуйста, выберите услугу и время!",
                 items: [
                     { name: "Мужская стрижка", price: 80000 },
                     { name: "Детская (до 10 лет)", price: 60000 },
@@ -251,13 +244,12 @@
                 ]
             },
             uz: {
-                chooseMaster: "Masterni tanlang",
+                chooseMaster: "Master",
                 services: "Xizmatlar",
                 selectTime: "Vaqtni tanlang",
                 book: "Zapis qilish",
-                aliRank: "Top Barber",
-                usmonRank: "Soqol ustasi",
-                alert: "Iltimos, hamma narsani tanlang!",
+                masterRank: "Top Barber",
+                alert: "Iltimos, xizmat va vaqtni tanlang!",
                 items: [
                     { name: "Sarchiroyli soch turmagi", price: 80000 },
                     { name: "Bolalar (10 yoshgacha)", price: 60000 },
@@ -284,8 +276,7 @@
             document.getElementById('services-title').innerText = t.services;
             document.getElementById('time-title').innerText = t.selectTime;
             document.getElementById('book-btn').innerText = t.book;
-            document.getElementById('ali-rank').innerText = t.aliRank;
-            document.getElementById('usmon-rank').innerText = t.usmonRank;
+            document.getElementById('master-rank').innerText = t.masterRank;
             
             renderServices(t.items);
             renderTimeGrid();
@@ -302,8 +293,12 @@
         }
 
         function renderTimeGrid() {
-            const times = ['09:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:00', '19:30'];
             const grid = document.getElementById('time-grid');
+            let times = [];
+            for(let h = 10; h <= 21; h++) {
+                times.push(`${h}:00`);
+                if(h < 21) times.push(`${h}:30`);
+            }
             grid.innerHTML = times.map(t => `
                 <div class="time-slot" onclick="selectTime(this, '${t}')">${t}</div>
             `).join('');
@@ -329,7 +324,7 @@
         }
 
         function confirmBooking() {
-            if(!selection.master || !selection.service || !selection.time) {
+            if(!selection.service || !selection.time) {
                 alert(translations[currentLang].alert);
                 return;
             }
