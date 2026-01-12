@@ -1,413 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Screen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Выбор услуг - Tulanov Barber</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #000000;
+            --tg-theme-button-color: #2481cc;
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-hint-color: #999999;
+        }
 
-  <!-- Google Fonts Preconnect -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #f0f0f0);
+            color: var(--tg-theme-text-color, #222);
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
 
-  <!-- Tailwind CSS v3 CDN (compatible with html2canvas) -->
-  <script src="https://cdn.tailwindcss.com"></script>
+        .header {
+            padding: 20px;
+            text-align: center;
+            background: #1a1a1a;
+            color: white;
+        }
 
-  <!-- Iconify Icons -->
-  <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-  <script>
-    // Tailwind v3 configuration with custom theme colors
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            background: 'var(--background)',
-            foreground: 'var(--foreground)',
-            card: {
-              DEFAULT: 'var(--card)',
-              foreground: 'var(--card-foreground)',
-            },
-            popover: {
-              DEFAULT: 'var(--popover)',
-              foreground: 'var(--popover-foreground)',
-            },
-            primary: {
-              DEFAULT: 'var(--primary)',
-              foreground: 'var(--primary-foreground)',
-            },
-            secondary: {
-              DEFAULT: 'var(--secondary)',
-              foreground: 'var(--secondary-foreground)',
-            },
-            muted: {
-              DEFAULT: 'var(--muted)',
-              foreground: 'var(--muted-foreground)',
-            },
-            accent: {
-              DEFAULT: 'var(--accent)',
-              foreground: 'var(--accent-foreground)',
-            },
-            destructive: {
-              DEFAULT: 'var(--destructive)',
-              foreground: '#ffffff',
-            },
-            border: 'var(--border)',
-            input: 'var(--input)',
-            ring: 'var(--ring)',
-            chart: {
-              1: 'var(--chart-1)',
-              2: 'var(--chart-2)',
-              3: 'var(--chart-3)',
-              4: 'var(--chart-4)',
-              5: 'var(--chart-5)',
-            },
-          },
-          fontFamily: {
-            sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-            heading: ['var(--font-heading)', 'system-ui', 'sans-serif'],
-            serif: ['var(--font-serif)', 'Georgia', 'serif'],
-            mono: ['var(--font-mono)', 'monospace'],
-          },
-          borderRadius: {
-            sm: 'calc(var(--radius) - 4px)',
-            md: 'calc(var(--radius) - 2px)',
-            lg: 'var(--radius)',
-            xl: 'calc(var(--radius) + 4px)',
-            '2xl': 'calc(var(--radius) + 8px)',
-            '3xl': 'calc(var(--radius) + 12px)',
-          },
-        },
-      },
-    }
-  </script>
+        .tab {
+            padding: 15px 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: var(--tg-theme-hint-color, #666);
+        }
 
-  <style>
-    /* CSS Custom Properties - Theme Values */
-    :root {
-      --background: #050505;
-      --foreground: #fafafa;
+        .tab.active {
+            color: var(--tg-theme-button-color, #2481cc);
+            border-bottom: 2px solid var(--tg-theme-button-color, #2481cc);
+            font-weight: bold;
+        }
 
-      --card: #121212;
-      --card-foreground: #ffffff;
+        .service-list {
+            padding: 10px;
+        }
 
-      --popover: #121212;
-      --popover-foreground: #ffffff;
+        .category-section {
+            display: none;
+        }
 
-      --primary: #D4AF37;
-      --primary-foreground: #000000;
+        .category-section.active {
+            display: block;
+        }
 
-      --secondary: #27272a;
-      --secondary-foreground: #ffffff;
+        .service-item {
+            background: #fff;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
 
-      --muted: #18181b;
-      --muted-foreground: #a1a1aa;
+        .service-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
 
-      --accent: #D4AF37;
-      --accent-foreground: #000000;
+        .service-info p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #888);
+        }
 
-      --destructive: #7f1d1d;
+        .book-btn {
+            background: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-      --border: #27272a;
-      --input: #27272a;
-      --ring: #D4AF37;
-
-      --radius: 0.75rem;
-
-      --chart-1: #D4AF37;
-      --chart-2: #F4C430;
-      --chart-3: #C5A028;
-      --chart-4: #8B701F;
-      --chart-5: #5C4A15;
-
-      --font-sans: "Inter", system-ui, sans-serif;
-      --font-heading: "Montserrat", system-ui, sans-serif;
-      --font-serif: "Playfair Display", Georgia, serif;
-      --font-mono: "JetBrains Mono", monospace;
-    }
-
-    /* Apply base font */
-    body {
-      font-family: var(--font-sans);
-      background-color: var(--background);
-      color: var(--foreground);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* Safe area utilities for mobile */
-    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
-    .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
-    .pl-safe { padding-left: env(safe-area-inset-left, 0px); }
-    .pr-safe { padding-right: env(safe-area-inset-right, 0px); }
-
-    /* Hide scrollbar but allow scrolling */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* Smooth transitions for interactive elements */
-    button, a, [role="button"] {
-      transition: all 0.15s ease;
-    }
-
-    /* Better image rendering */
-    img {
-      image-rendering: -webkit-optimize-contrast;
-    }
-  </style>
+        .book-btn:active {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
-  <div class="bg-background min-h-screen font-sans text-foreground relative overflow-hidden pb-24 selection:bg-primary/30">
+    <div class="header">
+        <h2>Выберите услугу</h2>
+    </div>
 
-    <!-- Ambient Background Glow -->
-    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    <div class="tabs" id="tabs">
+        <div class="tab active" onclick="showCategory('haircuts')">Стрижки</div>
+        <div class="tab" onclick="showCategory('beard')">Борода</div>
+        <div class="tab" onclick="showCategory('complex')">Комплексы</div>
+    </div>
 
-    <!-- Header -->
-    <header class="fixed top-0 w-full z-40 bg-background/80 backdrop-blur-md border-b border-white/5 pt-12 pb-4 px-6 flex items-center justify-between">
-        <!-- Menu Icon -->
-        <button class="text-foreground hover:text-primary transition-colors">
-            <iconify-icon icon="lucide:menu" width="24" height="24"></iconify-icon>
-        </button>
-
-        <!-- Centered Logo -->
-        <div class="flex flex-col items-center">
-            <iconify-icon icon="lucide:scissors" class="text-primary mb-1" width="20" height="20"></iconify-icon>
-            <span class="text-xs font-bold tracking-[0.2em] text-primary uppercase">Barber</span>
+    <div class="service-list">
+        <div id="haircuts" class="category-section active">
+            <div class="service-item">
+                <div class="service-info">
+                    <h3>Мужская стрижка</h3>
+                    <p>1000 ₽</p>
+                </div>
+                <button class="book-btn" onclick="selectService('Мужская стрижка', 1000)">Выбрать</button>
+            </div>
+            <div class="service-item">
+                <div class="service-info">
+                    <h3>Стрижка машинкой</h3>
+                    <p>600 ₽</p>
+                </div>
+                <button class="book-btn" onclick="selectService('Стрижка машинкой', 600)">Выбрать</button>
+            </div>
         </div>
 
-        <!-- Profile Avatar -->
-        <div class="relative group cursor-pointer">
-            <div class="w-10 h-10 rounded-full border border-primary/30 p-0.5">
-                <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Profile" class="w-full h-full rounded-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300">
+        <div id="beard" class="category-section">
+            <div class="service-item">
+                <div class="service-info">
+                    <h3>Оформление бороды</h3>
+                    <p>800 ₽</p>
+                </div>
+                <button class="book-btn" onclick="selectService('Оформление бороды', 800)">Выбрать</button>
             </div>
-            <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-primary border-2 border-background rounded-full"></div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="relative z-10 pt-32 px-5">
-        
-        <!-- Screen Title -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-foreground mb-1">Select Service</h1>
-            <p class="text-muted-foreground text-sm">Choose your grooming experience</p>
-        </div>
-
-        <!-- Search Bar -->
-        <div class="relative mb-8">
-            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
-                <iconify-icon icon="lucide:search" width="20" height="20"></iconify-icon>
+            <div class="service-item">
+                <div class="service-info">
+                    <h3>Бритье опасной бритвой</h3>
+                    <p>900 ₽</p>
+                </div>
+                <button class="book-btn" onclick="selectService('Бритье опасной бритвой', 900)">Выбрать</button>
             </div>
-            <input type="text" placeholder="Find a service..." class="w-full h-12 bg-card border border-border/50 rounded-2xl pl-12 pr-4 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 transition-all shadow-inner">
         </div>
 
-        <!-- Categories (Horizontal Scroll) -->
-        <div class="flex space-x-3 overflow-x-auto pb-6 no-scrollbar -mx-5 px-5">
-            <button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold shadow-[0_0_15px_rgba(212,175,55,0.3)] border border-primary">
-                All Services
-            </button>
-            <button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-card border border-border/50 text-muted-foreground text-sm font-medium whitespace-nowrap hover:border-primary/50 hover:text-foreground transition-colors">
-                Haircut
-            </button>
-            <button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-card border border-border/50 text-muted-foreground text-sm font-medium whitespace-nowrap hover:border-primary/50 hover:text-foreground transition-colors">
-                Beard Trim
-            </button>
-            <button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-card border border-border/50 text-muted-foreground text-sm font-medium whitespace-nowrap hover:border-primary/50 hover:text-foreground transition-colors">
-                Spa & Face
-            </button>
+        <div id="complex" class="category-section">
+            <div class="service-item">
+                <div class="service-info">
+                    <h3>Стрижка + Борода</h3>
+                    <p>1600 ₽</p>
+                </div>
+                <button class="book-btn" onclick="selectService('Стрижка + Борода', 1600)">Выбрать</button>
+            </div>
         </div>
+    </div>
 
-        <!-- Service List -->
-        <div class="space-y-4">
-            
-            <!-- Service Card 1: Active/Featured -->
-            <div class="group relative bg-card rounded-2xl p-5 border border-primary/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] overflow-hidden">
-                <!-- Inner Glow Effect -->
-                <div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-50 pointer-events-none"></div>
-                
-                <div class="flex justify-between items-start relative z-10">
-                    <div class="flex-1 pr-4">
-                        <div class="flex items-center gap-2 mb-1">
-                            <h3 class="text-lg font-bold text-foreground">Men's Cut</h3>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary border border-primary/20 uppercase tracking-wide">Popular</span>
-                        </div>
-                        <p class="text-muted-foreground text-xs leading-relaxed line-clamp-2 mb-3">
-                            Consultation, wash, precision haircut with scissors and clipper styling.
-                        </p>
-                        <div class="flex items-center gap-4 text-xs text-muted-foreground/80 font-medium">
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="lucide:clock" class="text-primary" width="14"></iconify-icon>
-                                45 min
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="lucide:user" class="text-primary" width="14"></iconify-icon>
-                                Senior Barber
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col items-end gap-4">
-                        <span class="text-xl font-bold text-primary">80k</span>
-                        <button class="h-9 w-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-[0_0_10px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 transition-transform">
-                            <iconify-icon icon="lucide:plus" width="20"></iconify-icon>
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
 
-            <!-- Service Card 2 -->
-            <div class="group relative bg-card rounded-2xl p-5 border border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
-                <div class="flex justify-between items-start">
-                    <div class="flex-1 pr-4">
-                        <h3 class="text-lg font-bold text-foreground mb-1">Beard Modeling</h3>
-                        <p class="text-muted-foreground text-xs leading-relaxed line-clamp-2 mb-3">
-                            Hot towel, razor outline, shaping and beard oil treatment.
-                        </p>
-                        <div class="flex items-center gap-4 text-xs text-muted-foreground/80 font-medium">
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="lucide:clock" class="text-primary/70" width="14"></iconify-icon>
-                                30 min
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col items-end gap-4">
-                        <span class="text-lg font-bold text-primary">50k</span>
-                        <button class="h-9 w-9 rounded-full bg-secondary text-foreground flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                            <iconify-icon icon="lucide:plus" width="18"></iconify-icon>
-                        </button>
-                    </div>
-                </div>
-            </div>
+        function showCategory(categoryId) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
 
-            <!-- Service Card 3 -->
-            <div class="group relative bg-card rounded-2xl p-5 border border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm">
-                <div class="flex justify-between items-start">
-                    <div class="flex-1 pr-4">
-                        <h3 class="text-lg font-bold text-foreground mb-1">Black Mask</h3>
-                        <p class="text-muted-foreground text-xs leading-relaxed line-clamp-2 mb-3">
-                            Deep pore cleansing charcoal mask for skin rejuvenation.
-                        </p>
-                        <div class="flex items-center gap-4 text-xs text-muted-foreground/80 font-medium">
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="lucide:clock" class="text-primary/70" width="14"></iconify-icon>
-                                20 min
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col items-end gap-4">
-                        <span class="text-lg font-bold text-primary">35k</span>
-                        <button class="h-9 w-9 rounded-full bg-secondary text-foreground flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                            <iconify-icon icon="lucide:plus" width="18"></iconify-icon>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            document.querySelectorAll('.category-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(categoryId).classList.add('active');
+        }
 
-            <!-- Service Card 4 -->
-            <div class="group relative bg-card rounded-2xl p-5 border border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm">
-                <div class="flex justify-between items-start">
-                    <div class="flex-1 pr-4">
-                        <h3 class="text-lg font-bold text-foreground mb-1">Combo: Royal Shave</h3>
-                        <p class="text-muted-foreground text-xs leading-relaxed line-clamp-2 mb-3">
-                            Full service haircut + beard styling + black mask treatment.
-                        </p>
-                        <div class="flex items-center gap-4 text-xs text-muted-foreground/80 font-medium">
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="lucide:clock" class="text-primary/70" width="14"></iconify-icon>
-                                90 min
-                            </div>
-                            <div class="flex items-center gap-1.5 text-green-500">
-                                <iconify-icon icon="lucide:tag" width="14"></iconify-icon>
-                                Save 15%
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col items-end gap-4">
-                        <span class="text-lg font-bold text-primary">140k</span>
-                        <button class="h-9 w-9 rounded-full bg-secondary text-foreground flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                            <iconify-icon icon="lucide:plus" width="18"></iconify-icon>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Service Card 5 -->
-            <div class="group relative bg-card rounded-2xl p-5 border border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm opacity-60">
-                <div class="absolute inset-0 bg-background/50 z-10 backdrop-blur-[1px] rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span class="bg-black/80 text-white px-3 py-1 rounded-full text-xs font-medium border border-white/10">Fully Booked</span>
-                </div>
-                <div class="flex justify-between items-start">
-                    <div class="flex-1 pr-4">
-                        <h3 class="text-lg font-bold text-foreground mb-1">Father & Son</h3>
-                        <p class="text-muted-foreground text-xs leading-relaxed line-clamp-2 mb-3">
-                            Double appointment for family grooming session.
-                        </p>
-                        <div class="flex items-center gap-4 text-xs text-muted-foreground/80 font-medium">
-                            <div class="flex items-center gap-1.5">
-                                <iconify-icon icon="lucide:clock" class="text-primary/70" width="14"></iconify-icon>
-                                60 min
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col items-end gap-4">
-                        <span class="text-lg font-bold text-primary">120k</span>
-                        <button class="h-9 w-9 rounded-full bg-secondary text-foreground flex items-center justify-center" disabled>
-                            <iconify-icon icon="lucide:plus" width="18"></iconify-icon>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Bottom padding for scroll -->
-        <div class="h-8"></div>
-    </main>
-
-    <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 w-full bg-background/90 backdrop-blur-xl border-t border-white/5 z-50 pb-5 pt-3">
-        <div class="flex justify-between items-center px-2">
-            
-            <!-- Tab 0: Services (Active) -->
-            <button class="flex flex-col items-center justify-center w-full space-y-1.5 group">
-                <div class="relative p-1.5 rounded-xl bg-primary/10 text-primary transition-all duration-300">
-                    <iconify-icon icon="lucide:scissors" width="24" height="24"></iconify-icon>
-                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></div>
-                </div>
-                <span class="text-[10px] font-medium text-primary tracking-wide">Services</span>
-            </button>
-
-            <!-- Tab 1: Masters -->
-            <button class="flex flex-col items-center justify-center w-full space-y-1.5 group">
-                <div class="relative p-1.5 rounded-xl text-muted-foreground group-hover:text-foreground transition-colors">
-                    <iconify-icon icon="lucide:users" width="24" height="24"></iconify-icon>
-                </div>
-                <span class="text-[10px] font-medium text-muted-foreground group-hover:text-foreground transition-colors">Masters</span>
-            </button>
-
-            <!-- Tab 2: My Bookings -->
-            <button class="flex flex-col items-center justify-center w-full space-y-1.5 group">
-                <div class="relative p-1.5 rounded-xl text-muted-foreground group-hover:text-foreground transition-colors">
-                    <iconify-icon icon="lucide:calendar-check" width="24" height="24"></iconify-icon>
-                </div>
-                <span class="text-[10px] font-medium text-muted-foreground group-hover:text-foreground transition-colors">My Bookings</span>
-            </button>
-
-            <!-- Tab 3: Profile -->
-            <button class="flex flex-col items-center justify-center w-full space-y-1.5 group">
-                <div class="relative p-1.5 rounded-xl text-muted-foreground group-hover:text-foreground transition-colors">
-                    <iconify-icon icon="lucide:user" width="24" height="24"></iconify-icon>
-                </div>
-                <span class="text-[10px] font-medium text-muted-foreground group-hover:text-foreground transition-colors">Profile</span>
-            </button>
-
-        </div>
-    </nav>
-
-</div>
+        function selectService(name, price) {
+            const data = {
+                service: name,
+                price: price
+            };
+            tg.sendData(JSON.stringify(data));
+            tg.close();
+        }
+    </script>
 </body>
 </html>
