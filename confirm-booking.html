@@ -304,5 +304,26 @@
     </nav>
 
 </div>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+  let tg = window.Telegram.WebApp;
+  tg.expand(); // Разворачивает окно на весь экран
+
+  // Находим твою кнопку подтверждения
+  // В твоем дизайне она обычно первая или единственная большая кнопка
+  document.querySelectorAll('button').forEach(btn => {
+    if (btn.innerText.includes('ПОДТВЕРДИТЬ') || btn.innerText.includes('Confirm')) {
+      btn.onclick = function() {
+        let data = {
+          order: "Новая запись на стрижку",
+          status: "confirmed"
+        };
+        tg.sendData(JSON.stringify(data)); // Отправка данных тебе в бот
+        tg.close(); // Закрываем сайт
+      }
+    }
+  });
+</script>
+
 </body>
 </html>
