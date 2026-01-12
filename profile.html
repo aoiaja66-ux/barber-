@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Screen</title>
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS v3 CDN (compatible with html2canvas) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Iconify Icons -->
+  <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
+
+  <script>
+    // Tailwind v3 configuration with custom theme colors
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: 'var(--background)',
+            foreground: 'var(--foreground)',
+            card: {
+              DEFAULT: 'var(--card)',
+              foreground: 'var(--card-foreground)',
+            },
+            popover: {
+              DEFAULT: 'var(--popover)',
+              foreground: 'var(--popover-foreground)',
+            },
+            primary: {
+              DEFAULT: 'var(--primary)',
+              foreground: 'var(--primary-foreground)',
+            },
+            secondary: {
+              DEFAULT: 'var(--secondary)',
+              foreground: 'var(--secondary-foreground)',
+            },
+            muted: {
+              DEFAULT: 'var(--muted)',
+              foreground: 'var(--muted-foreground)',
+            },
+            accent: {
+              DEFAULT: 'var(--accent)',
+              foreground: 'var(--accent-foreground)',
+            },
+            destructive: {
+              DEFAULT: 'var(--destructive)',
+              foreground: '#ffffff',
+            },
+            border: 'var(--border)',
+            input: 'var(--input)',
+            ring: 'var(--ring)',
+            chart: {
+              1: 'var(--chart-1)',
+              2: 'var(--chart-2)',
+              3: 'var(--chart-3)',
+              4: 'var(--chart-4)',
+              5: 'var(--chart-5)',
+            },
+          },
+          fontFamily: {
+            sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+            heading: ['var(--font-heading)', 'system-ui', 'sans-serif'],
+            serif: ['var(--font-serif)', 'Georgia', 'serif'],
+            mono: ['var(--font-mono)', 'monospace'],
+          },
+          borderRadius: {
+            sm: 'calc(var(--radius) - 4px)',
+            md: 'calc(var(--radius) - 2px)',
+            lg: 'var(--radius)',
+            xl: 'calc(var(--radius) + 4px)',
+            '2xl': 'calc(var(--radius) + 8px)',
+            '3xl': 'calc(var(--radius) + 12px)',
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    /* CSS Custom Properties - Theme Values */
+    :root {
+      --background: #050505;
+      --foreground: #fafafa;
+
+      --card: #121212;
+      --card-foreground: #ffffff;
+
+      --popover: #121212;
+      --popover-foreground: #ffffff;
+
+      --primary: #D4AF37;
+      --primary-foreground: #000000;
+
+      --secondary: #27272a;
+      --secondary-foreground: #ffffff;
+
+      --muted: #18181b;
+      --muted-foreground: #a1a1aa;
+
+      --accent: #D4AF37;
+      --accent-foreground: #000000;
+
+      --destructive: #7f1d1d;
+
+      --border: #27272a;
+      --input: #27272a;
+      --ring: #D4AF37;
+
+      --radius: 0.75rem;
+
+      --chart-1: #D4AF37;
+      --chart-2: #F4C430;
+      --chart-3: #C5A028;
+      --chart-4: #8B701F;
+      --chart-5: #5C4A15;
+
+      --font-sans: "Inter", system-ui, sans-serif;
+      --font-heading: "Montserrat", system-ui, sans-serif;
+      --font-serif: "Playfair Display", Georgia, serif;
+      --font-mono: "JetBrains Mono", monospace;
+    }
+
+    /* Apply base font */
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--background);
+      color: var(--foreground);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Safe area utilities for mobile */
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+    .pl-safe { padding-left: env(safe-area-inset-left, 0px); }
+    .pr-safe { padding-right: env(safe-area-inset-right, 0px); }
+
+    /* Hide scrollbar but allow scrolling */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Smooth transitions for interactive elements */
+    button, a, [role="button"] {
+      transition: all 0.15s ease;
+    }
+
+    /* Better image rendering */
+    img {
+      image-rendering: -webkit-optimize-contrast;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-background min-h-screen w-full relative flex flex-col font-sans overflow-hidden text-foreground">
+
+    <!-- Header -->
+    <header class="px-6 pt-12 pb-6 flex items-center justify-between z-10">
+        <button class="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center border border-white/5 text-muted-foreground hover:text-primary transition-colors">
+            <iconify-icon icon="lucide:settings" width="20" height="20"></iconify-icon>
+        </button>
+        <h1 class="text-lg font-medium tracking-wide text-foreground">Profile</h1>
+        <button class="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center border border-white/5 text-muted-foreground hover:text-primary transition-colors">
+            <iconify-icon icon="lucide:edit-3" width="20" height="20"></iconify-icon>
+        </button>
+    </header>
+
+    <!-- Main Scrollable Content -->
+    <main class="flex-1 overflow-y-auto px-6 pb-32">
+        
+        <!-- Loyalty Card Component -->
+        <div class="relative w-full aspect-[1.58] rounded-3xl bg-gradient-to-br from-[#D4AF37] via-[#B89628] to-[#8A701E] p-6 mb-8 overflow-hidden shadow-[0_10px_30px_-5px_rgba(212,175,55,0.25)] group">
+            
+            <!-- Texture/Noise Overlay -->
+            <div class="absolute inset-0 opacity-10 mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+            <!-- Shine Effect -->
+            <div class="absolute -right-20 -top-20 w-64 h-64 bg-white/20 blur-3xl rounded-full pointer-events-none mix-blend-soft-light"></div>
+            
+            <!-- Card Content -->
+            <div class="relative z-10 flex flex-col justify-between h-full text-black">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-60 block mb-1">Membership</span>
+                        <h2 class="text-2xl font-bold tracking-tight">Platinum</h2>
+                    </div>
+                    <iconify-icon icon="lucide:crown" class="opacity-80" width="28"></iconify-icon>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="h-8 px-3 rounded bg-black/10 backdrop-blur-sm border border-black/5 flex items-center justify-center gap-2">
+                            <span class="text-xs font-bold tracking-widest">VIP</span>
+                        </div>
+                    </div>
+                    <div class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-60 mb-1">Member Name</div>
+                    <div class="flex items-end justify-between">
+                        <span class="text-xl font-medium tracking-wide">Alexander V.</span>
+                        <span class="font-mono text-xs opacity-70 tracking-widest">8842 1094</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-3 gap-3 mb-8">
+            <div class="bg-card rounded-2xl border border-white/5 p-4 flex flex-col items-center justify-center gap-1 shadow-sm">
+                <span class="text-2xl font-light text-primary tracking-tight">1,250</span>
+                <span class="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Points</span>
+            </div>
+            <div class="bg-card rounded-2xl border border-white/5 p-4 flex flex-col items-center justify-center gap-1 shadow-sm">
+                <span class="text-2xl font-light text-foreground tracking-tight">12</span>
+                <span class="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Visits</span>
+            </div>
+            <div class="bg-card rounded-2xl border border-white/5 p-4 flex flex-col items-center justify-center gap-1 shadow-sm">
+                <span class="text-2xl font-light text-foreground tracking-tight">15%</span>
+                <span class="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Discount</span>
+            </div>
+        </div>
+
+        <!-- Past Haircuts Section -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-widest">Recent History</h3>
+                <button class="text-xs text-primary font-medium hover:text-primary/80 transition-colors">View All</button>
+            </div>
+            
+            <div class="space-y-3">
+                <!-- History Item 1 -->
+                <div class="bg-card rounded-2xl p-4 border border-white/5 flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-secondary border border-white/5 flex items-center justify-center shrink-0 overflow-hidden relative">
+                         <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Master" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity grayscale">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium text-foreground truncate">Signature Cut & Beard</div>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs text-muted-foreground">Oct 24</span>
+                            <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                            <span class="text-xs text-muted-foreground">Master Alex</span>
+                        </div>
+                    </div>
+                    <button class="h-9 px-4 rounded-xl bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition-all active:scale-95">
+                        Rebook
+                    </button>
+                </div>
+
+                <!-- History Item 2 -->
+                <div class="bg-card rounded-2xl p-4 border border-white/5 flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-secondary border border-white/5 flex items-center justify-center shrink-0 text-muted-foreground">
+                         <iconify-icon icon="lucide:scissors" width="20"></iconify-icon>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium text-foreground truncate">Classic Haircut</div>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs text-muted-foreground">Sep 12</span>
+                            <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                            <span class="text-xs text-muted-foreground">Master David</span>
+                        </div>
+                    </div>
+                    <button class="h-9 px-4 rounded-xl bg-secondary text-muted-foreground text-[10px] font-bold uppercase tracking-wide hover:bg-primary hover:text-primary-foreground transition-all active:scale-95">
+                        Rebook
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Links -->
+        <div class="bg-card rounded-3xl border border-white/5 overflow-hidden">
+            <button class="w-full p-5 flex items-center justify-between hover:bg-white/5 transition-colors border-b border-white/5 group">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
+                        <iconify-icon icon="lucide:bell" width="16"></iconify-icon>
+                    </div>
+                    <span class="text-sm text-foreground font-medium">Notifications</span>
+                </div>
+                <iconify-icon icon="lucide:chevron-right" class="text-muted-foreground/30" width="20"></iconify-icon>
+            </button>
+            
+            <button class="w-full p-5 flex items-center justify-between hover:bg-white/5 transition-colors border-b border-white/5 group">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
+                        <iconify-icon icon="lucide:credit-card" width="16"></iconify-icon>
+                    </div>
+                    <span class="text-sm text-foreground font-medium">Payment Methods</span>
+                </div>
+                <iconify-icon icon="lucide:chevron-right" class="text-muted-foreground/30" width="20"></iconify-icon>
+            </button>
+
+            <button class="w-full p-5 flex items-center justify-between hover:bg-white/5 transition-colors group">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
+                        <iconify-icon icon="lucide:globe" width="16"></iconify-icon>
+                    </div>
+                    <span class="text-sm text-foreground font-medium">Language</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-muted-foreground">English</span>
+                    <iconify-icon icon="lucide:chevron-right" class="text-muted-foreground/30" width="20"></iconify-icon>
+                </div>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 h-[80px] bg-card/80 backdrop-blur-xl border-t border-white/5 flex items-center justify-around px-2 z-30 pb-4 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
+        
+        <!-- Tab 0: Services -->
+        <button class="flex flex-col items-center justify-center w-16 gap-1.5 group">
+            <div class="relative p-1">
+                <iconify-icon icon="lucide:scissors" class="text-muted-foreground group-hover:text-primary transition-colors" width="24" height="24"></iconify-icon>
+            </div>
+            <span class="text-[10px] font-medium text-muted-foreground group-hover:text-primary transition-colors">Services</span>
+        </button>
+
+        <!-- Tab 1: Masters -->
+        <button class="flex flex-col items-center justify-center w-16 gap-1.5 group">
+            <div class="relative p-1">
+                <iconify-icon icon="lucide:users" class="text-muted-foreground group-hover:text-primary transition-colors" width="24" height="24"></iconify-icon>
+            </div>
+            <span class="text-[10px] font-medium text-muted-foreground group-hover:text-primary transition-colors">Masters</span>
+        </button>
+
+        <!-- Tab 2: My Bookings -->
+        <button class="flex flex-col items-center justify-center w-16 gap-1.5 group">
+            <div class="relative p-1">
+                <iconify-icon icon="lucide:calendar-check" class="text-muted-foreground group-hover:text-primary transition-colors" width="24" height="24"></iconify-icon>
+            </div>
+            <span class="text-[10px] font-medium text-muted-foreground group-hover:text-primary transition-colors">Bookings</span>
+        </button>
+
+        <!-- Tab 3: Profile (ACTIVE) -->
+        <button class="flex flex-col items-center justify-center w-16 gap-1.5 group relative">
+            <div class="relative p-1">
+                <!-- Active Glow -->
+                <div class="absolute inset-0 bg-primary/20 blur-lg rounded-full opacity-50"></div>
+                <iconify-icon icon="lucide:user" class="text-primary relative z-10" width="24" height="24"></iconify-icon>
+            </div>
+            <span class="text-[10px] font-medium text-primary">Profile</span>
+            <!-- Active Indicator Dot -->
+            <div class="w-1 h-1 rounded-full bg-primary absolute -bottom-1 shadow-[0_0_8px_#D4AF37]"></div>
+        </button>
+
+    </nav>
+
+</div>
+</body>
+</html>
