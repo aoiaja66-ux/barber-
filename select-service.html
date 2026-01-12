@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -25,17 +25,32 @@
 
         .header {
             background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
-            padding: 30px 20px;
+            padding: 20px;
             text-align: center;
             border-bottom: 2px solid var(--gold);
         }
 
-        .header h1 {
+        .lang-switch {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            background: #1a1a1a;
+        }
+
+        .lang-btn {
+            background: var(--dark-grey);
             color: var(--gold);
-            margin: 0;
-            font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            border: 1px solid var(--gold);
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .lang-btn.active {
+            background: var(--gold);
+            color: var(--black);
         }
 
         .section-title {
@@ -61,7 +76,6 @@
             padding: 15px;
             text-align: center;
             border: 1px solid transparent;
-            transition: 0.3s;
         }
 
         .master-card.selected {
@@ -81,9 +95,6 @@
             font-size: 30px;
             border: 2px solid var(--gold);
         }
-
-        .master-name { font-weight: bold; margin-bottom: 5px; }
-        .master-rank { font-size: 12px; color: var(--gold); }
 
         .service-item {
             background: var(--dark-grey);
@@ -106,11 +117,6 @@
             padding: 8px 15px;
             border-radius: 8px;
             font-weight: bold;
-            cursor: pointer;
-        }
-
-        .select-btn.selected {
-            background: #fff;
         }
 
         .time-grid {
@@ -132,11 +138,6 @@
             background: var(--gold);
             color: var(--black);
             font-weight: bold;
-        }
-
-        .time-slot.taken {
-            opacity: 0.3;
-            text-decoration: line-through;
         }
 
         .footer {
@@ -163,99 +164,150 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Tulanov Barber</h1>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('ru')">RU</button>
+        <button class="lang-btn" onclick="setLang('uz')">UZ</button>
     </div>
 
-    <div class="section-title">Tanlang: Master</div>
+    <div class="header">
+        <h1 id="title">Tulanov Barber</h1>
+    </div>
+
+    <div class="section-title" id="choose-master">Choose Master</div>
     <div class="masters-container">
-        <div class="master-card" onclick="selectMaster(this, 'Ali', 'Top Barbor')">
+        <div class="master-card" onclick="selectMaster(this, 'Ali', 'Top Barber')">
             <div class="master-photo">👨🏻‍💼</div>
             <div class="master-name">Ali</div>
-            <div class="master-rank">Top Barber</div>
+            <div class="master-rank" id="ali-rank">Top Barber</div>
         </div>
-        <div class="master-card" onclick="selectMaster(this, 'Usmon', 'Soqol ustasi')">
+        <div class="master-card" onclick="selectMaster(this, 'Usmon', 'Beard Specialist')">
             <div class="master-photo">🧔🏻</div>
             <div class="master-name">Usmon</div>
-            <div class="master-rank">Soqol ustasi</div>
+            <div class="master-rank" id="usmon-rank">Beard Specialist</div>
         </div>
     </div>
 
-    <div class="section-title">Xizmatlar</div>
-    <div id="services">
-        <div class="service-item">
-            <div class="service-info"><h3>Sarchiroyli soch turmagi</h3><p>80.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Sarchiroyli soch turmagi', 80000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Bolalar (10 yoshgacha)</h3><p>60.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Bolalar (10 yoshgacha)', 60000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Soch + Soqol</h3><p>150.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Soch + Soqol', 150000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Kamuflaj</h3><p>50.000 - 80.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Kamuflaj', 50000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Soqol modelingi</h3><p>50.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Soqol modelingi', 50000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Okantovka</h3><p>30.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Okantovka', 30000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Bosh yuvish</h3><p>25.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Bosh yuvish', 25000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Yuz tozalash</h3><p>60.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Yuz tozalash', 60000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Qora maska</h3><p>50.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Qora maska', 50000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Vosk (1 zona)</h3><p>15.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Vosk', 15000)">+</button>
-        </div>
-        <div class="service-item">
-            <div class="service-info"><h3>Mashinkada olish</h3><p>40.000 so'm</p></div>
-            <button class="select-btn" onclick="selectService(this, 'Mashinkada olish', 40000)">+</button>
-        </div>
-    </div>
+    <div class="section-title" id="services-title">Services</div>
+    <div id="services-list"></div>
 
-    <div class="section-title">Vaqtni tanlang</div>
-    <div class="time-grid">
-        <div class="time-slot" onclick="selectTime(this, '09:00')">09:00</div>
-        <div class="time-slot" onclick="selectTime(this, '10:30')">10:30</div>
-        <div class="time-slot taken">12:00</div>
-        <div class="time-slot" onclick="selectTime(this, '13:30')">13:30</div>
-        <div class="time-slot" onclick="selectTime(this, '15:00')">15:00</div>
-        <div class="time-slot" onclick="selectTime(this, '16:30')">16:30</div>
-        <div class="time-slot" onclick="selectTime(this, '18:00')">18:00</div>
-        <div class="time-slot" onclick="selectTime(this, '19:30')">19:30</div>
-    </div>
+    <div class="section-title" id="time-title">Select Time</div>
+    <div class="time-grid" id="time-grid"></div>
 
     <div class="footer">
-        <button class="main-btn" onclick="confirmBooking()">Zapis qilish</button>
+        <button class="main-btn" id="book-btn" onclick="confirmBooking()">Book Appointment</button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        tg.MainButton.hide();
 
-        let selection = {
-            master: null,
-            service: null,
-            price: null,
-            time: null
+        let currentLang = 'en';
+        let selection = { master: null, service: null, price: null, time: null, lang: 'en' };
+
+        const translations = {
+            en: {
+                chooseMaster: "Choose Master",
+                services: "Services",
+                selectTime: "Select Time",
+                book: "Book Appointment",
+                aliRank: "Top Barber",
+                usmonRank: "Beard Specialist",
+                alert: "Please select all options!",
+                items: [
+                    { name: "Premium Haircut", price: 80000 },
+                    { name: "Kids (under 10)", price: 60000 },
+                    { name: "Hair + Beard", price: 150000 },
+                    { name: "Camouflage", price: 50000 },
+                    { name: "Beard Modeling", price: 50000 },
+                    { name: "Hairline Trim", price: 30000 },
+                    { name: "Hair Wash", price: 25000 },
+                    { name: "Facial Cleaning", price: 60000 },
+                    { name: "Black Mask", price: 50000 },
+                    { name: "Waxing (1 zone)", price: 15000 },
+                    { name: "Clipper Cut", price: 40000 }
+                ]
+            },
+            ru: {
+                chooseMaster: "Выберите мастера",
+                services: "Услуги",
+                selectTime: "Выберите время",
+                book: "Записаться",
+                aliRank: "Топ Барбер",
+                usmonRank: "Мастер по бороде",
+                alert: "Пожалуйста, выберите все параметры!",
+                items: [
+                    { name: "Мужская стрижка", price: 80000 },
+                    { name: "Детская (до 10 лет)", price: 60000 },
+                    { name: "Стрижка + Борода", price: 150000 },
+                    { name: "Камуфляж", price: 50000 },
+                    { name: "Моделирование бороды", price: 50000 },
+                    { name: "Окантовка", price: 30000 },
+                    { name: "Мытье головы", price: 25000 },
+                    { name: "Чистка лица", price: 60000 },
+                    { name: "Черная маска", price: 50000 },
+                    { name: "Воск (1 зона)", price: 15000 },
+                    { name: "Стрижка под машинку", price: 40000 }
+                ]
+            },
+            uz: {
+                chooseMaster: "Masterni tanlang",
+                services: "Xizmatlar",
+                selectTime: "Vaqtni tanlang",
+                book: "Zapis qilish",
+                aliRank: "Top Barber",
+                usmonRank: "Soqol ustasi",
+                alert: "Iltimos, hamma narsani tanlang!",
+                items: [
+                    { name: "Sarchiroyli soch turmagi", price: 80000 },
+                    { name: "Bolalar (10 yoshgacha)", price: 60000 },
+                    { name: "Soch + Soqol", price: 150000 },
+                    { name: "Kamuflaj", price: 50000 },
+                    { name: "Soqol modelingi", price: 50000 },
+                    { name: "Okantovka", price: 30000 },
+                    { name: "Bosh yuvish", price: 25000 },
+                    { name: "Yuz tozalash", price: 60000 },
+                    { name: "Qora maska", price: 50000 },
+                    { name: "Vosk (1 zona)", price: 15000 },
+                    { name: "Mashinkada olish", price: 40000 }
+                ]
+            }
         };
+
+        function setLang(lang) {
+            currentLang = lang;
+            selection.lang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase() === lang));
+            
+            const t = translations[lang];
+            document.getElementById('choose-master').innerText = t.chooseMaster;
+            document.getElementById('services-title').innerText = t.services;
+            document.getElementById('time-title').innerText = t.selectTime;
+            document.getElementById('book-btn').innerText = t.book;
+            document.getElementById('ali-rank').innerText = t.aliRank;
+            document.getElementById('usmon-rank').innerText = t.usmonRank;
+            
+            renderServices(t.items);
+            renderTimeGrid();
+        }
+
+        function renderServices(items) {
+            const list = document.getElementById('services-list');
+            list.innerHTML = items.map(item => `
+                <div class="service-item">
+                    <div class="service-info"><h3>${item.name}</h3><p>${item.price.toLocaleString()} UZS</p></div>
+                    <button class="select-btn" onclick="selectService(this, '${item.name}', ${item.price})">+</button>
+                </div>
+            `).join('');
+        }
+
+        function renderTimeGrid() {
+            const times = ['09:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:00', '19:30'];
+            const grid = document.getElementById('time-grid');
+            grid.innerHTML = times.map(t => `
+                <div class="time-slot" onclick="selectTime(this, '${t}')">${t}</div>
+            `).join('');
+        }
 
         function selectMaster(el, name, rank) {
             document.querySelectorAll('.master-card').forEach(c => c.classList.remove('selected'));
@@ -271,7 +323,6 @@
         }
 
         function selectTime(el, time) {
-            if(el.classList.contains('taken')) return;
             document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
             el.classList.add('selected');
             selection.time = time;
@@ -279,12 +330,14 @@
 
         function confirmBooking() {
             if(!selection.master || !selection.service || !selection.time) {
-                alert('Iltimos, hamma narsani tanlang!');
+                alert(translations[currentLang].alert);
                 return;
             }
             tg.sendData(JSON.stringify(selection));
             tg.close();
         }
+
+        setLang('en');
     </script>
 </body>
 </html>
